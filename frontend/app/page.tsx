@@ -1,10 +1,32 @@
 import Image from 'next/image';
 
-async function getProducts(){
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
-  const res = await fetch(base + '/products', { next: { revalidate: 60 } });
-  if(!res.ok) return { products: [] } as any; return res.json();
+async function getProducts() {
+  const base = process.env.NEXT_PUBLIC_API_BASE;
+  
+  if (!base) {
+    console.error("API Base URL is missing!");
+    return { products: [] };
+  }
+
+  try {
+    // We add a timeout or check if the server is actually there
+    const res = await fetch(`${base}/products`, { 
+      next: { revalidate: 60 },
+      cache: 'no-store' // Use this during debugging to avoid old data
+    });
+
+    if (!res.ok) {
+      console.warn("Backend responded with an error");
+      return { products: [] };
+    }
+    
+    return res.json();
+  } catch (err) {
+    console.error("Could not connect to backend at " + base);
+    return { products: [] }; // Return empty list instead of crashing the app
+  }
 }
+
 
 export default async function Home(){
   const { products } = await getProducts();
