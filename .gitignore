@@ -22,10 +22,6 @@ coverage/
 logs/
 **/*.tsbuildinfo
 
-# --- Env / Secrets ---
-.env
-.env.*            # includes .env.local, .env.production etc.
-!.env.example     # keep a template without secrets
 
 # --- Editor / OS ---
 .DS_Store
