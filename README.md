@@ -9,6 +9,11 @@ This repo contains a separated **frontend** (Next.js) and **backend** (Express +
 - PDF invoice
 - Admin console (products, discount codes, order status)
 
+```
+The Whole Frontend Code is in Branch - Frontend
+The Whole Backend Code is in Branch - Backend
+```
+
 ## Quick Start
 
 ### 1) Backend
