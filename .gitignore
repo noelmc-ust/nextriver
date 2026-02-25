@@ -1,3 +1,57 @@
-/backend/node_modules/*
-/frontend/node_modules/*
-/frontend/.next/*
+# --- Node ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json.*   # partial files left by aborted installs
+
+# --- Next.js ---
+.next/
+out/
+.next/static/
+.next/cache/
+.vercel/
+.turbo/
+
+# --- Build Artifacts ---
+build/
+coverage/
+*.log
+*.log.*
+logs/
+**/*.tsbuildinfo
+
+# --- Env / Secrets ---
+.env
+.env.*            # includes .env.local, .env.production etc.
+!.env.example     # keep a template without secrets
+
+# --- Editor / OS ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# --- Images/Cache (if any) ---
+public/static/cache/
+public/**/*.map
+
+# --- Linting/Type Checking ---
+.eslintcache
+
+# --- Docker (if used) ---
+docker-compose.override.yml
+.docker/
+*.pid
+
+# --- PM2 (if used locally) ---
+.pids/
+pids/
+pids-*.log
+pm2.log
+pm2.pid
