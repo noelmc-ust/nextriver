@@ -10,7 +10,7 @@ async function getProducts() {
 
   try {
     // We add a timeout or check if the server is actually there
-    const res = await fetch(`${base}/products`, { 
+    const res = await fetch(`${base}/products`, { cache: 'no-store' });
       next: { revalidate: 60 },
       cache: 'no-store' // Use this during debugging to avoid old data
     });
