@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
@@ -12,8 +13,8 @@ export default function Catalog(){
 
   async function load(){
     const [p,c] = await Promise.all([
-      fetch(`${API}/products`).then(r=>r.json()),
-      fetch(`${API}/cart`, { credentials:'include' }).then(r=>r.json()).catch(()=>({items:[]}))
+      fetch(`${API_BASE}/products`).then(r=>r.json()),
+      fetch(`${API_BASE}/cart`, { credentials:'include' }).then(r=>r.json()).catch(()=>({items:[]}))
     ]);
     setProducts(p.products||[]); setItems(c.items||[]);
     let t=0; for(const i of (c.items||[])){ const prod=(p.products||[]).find((pp:any)=>pp.id===(i.productId||i.product_id)); if(prod) t += prod.priceCents*(i.qty||1); }
@@ -22,12 +23,12 @@ export default function Catalog(){
   useEffect(()=>{ load(); },[]);
 
   async function add(pid:number){
-    await fetch(`${API}/cart/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid, qty:1 }) });
+    await fetch(`${API_BASE}/cart/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid, qty:1 }) });
     await load();
   }
-  async function remove(pid:number){ await fetch(`${API}/cart/remove`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid }) }); await load(); }
-  async function setQty(pid:number, q:number){ const i=items.find((x:any)=> (x.productId||x.product_id)===pid); const current=i?i.qty:0; const delta=Math.max(1,q)-current; if(delta!==0){ await fetch(`${API}/cart/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid, qty: delta }) }); await load(); } }
-  async function apply(){ const r=await fetch(`${API}/discounts/validate`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code })}); const d=await r.json(); if(r.ok) setDiscount(d.discount_cents||0); else { setDiscount(0); alert(d.error||'Invalid code'); } }
+  async function remove(pid:number){ await fetch(`${API_BASE}/cart/remove`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid }) }); await load(); }
+  async function setQty(pid:number, q:number){ const i=items.find((x:any)=> (x.productId||x.product_id)===pid); const current=i?i.qty:0; const delta=Math.max(1,q)-current; if(delta!==0){ await fetch(`${API_BASE}/cart/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ productId: pid, qty: delta }) }); await load(); } }
+  async function apply(){ const r=await fetch(`${API_BASE}/discounts/validate`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code })}); const d=await r.json(); if(r.ok) setDiscount(d.discount_cents||0); else { setDiscount(0); alert(d.error||'Invalid code'); } }
 
   const payable=Math.max(0,total-discount);
 

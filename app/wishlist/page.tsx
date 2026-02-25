@@ -1,9 +1,10 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 export default function Wishlist(){
   const [products,setProducts]=useState<any[]>([]);
-  useEffect(()=>{ fetch(`${API}/wishlist`,{ credentials:'include' }).then(r=>r.json()).then(d=>setProducts(d.products||[])); },[]);
+  useEffect(()=>{ fetch(`${API_BASE}/wishlist`,{ credentials:'include' }).then(r=>r.json()).then(d=>setProducts(d.products||[])); },[]);
   return (
     <section className='container'>
       <div className='topbar'><div><div className='badge'>Your Favourites</div><h2>Wishlist</h2></div></div>

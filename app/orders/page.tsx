@@ -1,9 +1,10 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 export default function Orders(){
   const [orders,setOrders]=useState<any[]>([]);
-  useEffect(()=>{ fetch(`${API}/orders`,{ credentials:'include' }).then(r=>r.json()).then(d=>setOrders(d.orders||[])); },[]);
+  useEffect(()=>{ fetch(`${API_BASE}/orders`,{ credentials:'include' }).then(r=>r.json()).then(d=>setOrders(d.orders||[])); },[]);
   return (
     <section className="container">
       <div className="topbar"><div><div className="badge">Order History</div><h2>Your Orders</h2></div></div>
@@ -20,7 +21,7 @@ export default function Orders(){
               <div className='total'>Total: ₹{(o.total_cents/100).toFixed(2)}</div>
             </div>
             <div className='actions' style={{marginTop:'.5rem'}}>
-              <a className='btn ghost' href={`${API}/orders/${o.id}/invoice`} target='_blank' rel='noopener'>Download Invoice (PDF)</a>
+              <a className='btn ghost' href={`${API_BASE}/orders/${o.id}/invoice`} target='_blank' rel='noopener'>Download Invoice (PDF)</a>
             </div>
           </div>
         ))}

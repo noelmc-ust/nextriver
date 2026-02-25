@@ -1,15 +1,16 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 export default function Addresses(){
   const [list,setList]=useState<any[]>([]);
   const [form,setForm]=useState<any>({ fullName:'', line1:'', line2:'', city:'', state:'', postalCode:'', country:'IN', phone:'', isDefault:false });
-  async function load(){ const r=await fetch(`${API}/addresses`,{ credentials:'include' }); const d=await r.json(); setList(d.addresses||[]); }
+  async function load(){ const r=await fetch(`${API_BASE}/addresses`,{ credentials:'include' }); const d=await r.json(); setList(d.addresses||[]); }
   useEffect(()=>{ load(); },[]);
 
-  async function add(){ const r=await fetch(`${API}/addresses/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) }); if(r.ok){ setForm({ fullName:'', line1:'', line2:'', city:'', state:'', postalCode:'', country:'IN', phone:'', isDefault:false }); load(); } else { alert('Add failed'); } }
-  async function del(id:number){ if(!confirm('Delete?')) return; const r=await fetch(`${API}/addresses/delete`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id }) }); if(r.ok) load(); }
-  async function makeDefault(id:number){ await fetch(`${API}/addresses/update`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id, isDefault:true }) }); load(); }
+  async function add(){ const r=await fetch(`${API_BASE}/addresses/add`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) }); if(r.ok){ setForm({ fullName:'', line1:'', line2:'', city:'', state:'', postalCode:'', country:'IN', phone:'', isDefault:false }); load(); } else { alert('Add failed'); } }
+  async function del(id:number){ if(!confirm('Delete?')) return; const r=await fetch(`${API_BASE}/addresses/delete`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id }) }); if(r.ok) load(); }
+  async function makeDefault(id:number){ await fetch(`${API_BASE}/addresses/update`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ id, isDefault:true }) }); load(); }
 
   return (
     <section className='container'>

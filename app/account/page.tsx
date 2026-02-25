@@ -1,9 +1,10 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 export default function Account(){
   const [user,setUser]=useState<any>(null);
-  useEffect(()=>{ fetch(`${API}/me`,{ credentials:'include' }).then(r=>r.json()).then(d=>setUser(d.user)).catch(()=>setUser(null)); },[]);
+  useEffect(()=>{ fetch(`${API_BASE}/me`,{ credentials:'include' }).then(r=>r.json()).then(d=>setUser(d.user)).catch(()=>setUser(null)); },[]);
   if(!user) return <section className='container'><div className='form'>Please sign in.</div></section>;
   return (
     <section className='container'>

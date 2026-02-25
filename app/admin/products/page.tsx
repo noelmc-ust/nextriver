@@ -1,14 +1,15 @@
 'use client';
+import { API_BASE } from "../../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 export default function AdminProducts(){
   const [list,setList]=useState<any[]>([]);
   const [form,setForm]=useState<any>({ name:'', priceCents:0, imageUrl:'', description:'', stock:100, sku:'', active:true });
-  async function load(){ const r=await fetch(`${API}/admin/products`,{ credentials:'include' }); const d=await r.json(); setList(d.products||[]); }
+  async function load(){ const r=await fetch(`${API_BASE}/admin/products`,{ credentials:'include' }); const d=await r.json(); setList(d.products||[]); }
   useEffect(()=>{ load(); },[]);
-  async function create(){ const r=await fetch(`${API}/admin/products`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) }); if(r.ok){ setForm({ name:'', priceCents:0, imageUrl:'', description:'', stock:100, sku:'', active:true }); load(); } else alert('Create failed'); }
-  async function update(p:any){ const r=await fetch(`${API}/admin/products/${p.id}`,{ method:'PATCH', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) }); if(r.ok) load(); }
-  async function del(id:number){ if(!confirm('Delete?')) return; const r=await fetch(`${API}/admin/products/${id}`,{ method:'DELETE', credentials:'include' }); if(r.ok) load(); }
+  async function create(){ const r=await fetch(`${API_BASE}/admin/products`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(form) }); if(r.ok){ setForm({ name:'', priceCents:0, imageUrl:'', description:'', stock:100, sku:'', active:true }); load(); } else alert('Create failed'); }
+  async function update(p:any){ const r=await fetch(`${API_BASE}/admin/products/${p.id}`,{ method:'PATCH', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify(p) }); if(r.ok) load(); }
+  async function del(id:number){ if(!confirm('Delete?')) return; const r=await fetch(`${API_BASE}/admin/products/${id}`,{ method:'DELETE', credentials:'include' }); if(r.ok) load(); }
   return (
     <section className='container'>
       <div className='topbar'><div><div className='badge'>Admin</div><h2>Products</h2></div></div>

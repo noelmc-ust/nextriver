@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE } from "../lib/apiBase";
 import { useEffect, useState } from 'react';
 const API = process.env.NEXT_PUBLIC_API_BASE as string;
 
@@ -12,9 +13,9 @@ export default function Checkout(){
 
   useEffect(()=>{ (async()=>{
     const [c,p,a] = await Promise.all([
-      fetch(`${API}/cart`, { credentials:'include' }).then(r=>r.json()),
-      fetch(`${API}/products`).then(r=>r.json()),
-      fetch(`${API}/addresses`, { credentials:'include' }).then(r=>r.json()).catch(()=>({addresses:[]}))
+      fetch(`${API_BASE}/cart`, { credentials:'include' }).then(r=>r.json()),
+      fetch(`${API_BASE}/products`).then(r=>r.json()),
+      fetch(`${API_BASE}/addresses`, { credentials:'include' }).then(r=>r.json()).catch(()=>({addresses:[]}))
     ]);
     setItems(c.items||[]); setProducts(p.products||[]);
     const def=(a.addresses||[]).find((x:any)=>x.isDefault) || (a.addresses||[])[0];
@@ -24,8 +25,8 @@ export default function Checkout(){
   const total = items.reduce((acc,it)=>{ const pid=it.productId||it.product_id; const prod=products.find((pp:any)=>pp.id===pid); return acc+(prod?prod.priceCents*it.qty:0); },0);
   const payable = Math.max(0,total-discount);
 
-  async function apply(){ const r=await fetch(`${API}/discounts/validate`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code })}); const d=await r.json(); if(r.ok) setDiscount(d.discount_cents||0); else { setDiscount(0); alert(d.error||'Invalid code'); } }
-  async function place(){ const r=await fetch(`${API}/orders/checkout`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code, shippingAddress:shipping, payment })}); const d=await r.json(); if(!r.ok){ alert(d.error||'Checkout failed'); return; } window.location.href='/orders'; }
+  async function apply(){ const r=await fetch(`${API_BASE}/discounts/validate`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code })}); const d=await r.json(); if(r.ok) setDiscount(d.discount_cents||0); else { setDiscount(0); alert(d.error||'Invalid code'); } }
+  async function place(){ const r=await fetch(`${API_BASE}/orders/checkout`,{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ code, shippingAddress:shipping, payment })}); const d=await r.json(); if(!r.ok){ alert(d.error||'Checkout failed'); return; } window.location.href='/orders'; }
 
   return (
     <section className="container">
