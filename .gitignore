@@ -15,10 +15,6 @@ coverage/
 logs/
 **/*.tsbuildinfo
 
-# --- Env / Secrets ---
-.env
-.env.*              # includes .env.local, .env.production, etc.
-!.env.example       # keep a template without secrets
 
 # --- Prisma (if used) ---
 # Keep migrations in git; ignore local dbs and generated clients if any
