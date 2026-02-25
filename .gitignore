@@ -53,3 +53,4 @@ pids/
 pids-*.log
 pm2.log
 pm2.pid
+.next
